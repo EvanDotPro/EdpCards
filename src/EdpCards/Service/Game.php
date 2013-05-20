@@ -23,6 +23,7 @@ class Game implements GameInterface, SM\ServiceLocatorAwareInterface, EM\EventMa
         $game = $this->getGameMapper()->insertGame($name);
         $this->getCardMapper()->copyDecksToGame($game->getId(), $decks);
         $player = $this->joinGame($game->getId(), $displayName, $email);
+        $this->getCardMapper()->dealCardsToPlayer($game->getId(), $player->getId(), 10);
         return $game;
     }
 
@@ -55,7 +56,9 @@ class Game implements GameInterface, SM\ServiceLocatorAwareInterface, EM\EventMa
      */
     public function joinGame($gameId, $displayName, $email = false)
     {
-        return $this->getPlayerMapper()->insertPlayer($gameId, $displayName, $email);
+        $player = $this->getPlayerMapper()->insertPlayer($gameId, $displayName, $email);
+        $this->getCardMapper()->dealCardsToPlayer($gameId, $player->getId(), 10);
+        return $player;
     }
 
     protected function getGameMapper()

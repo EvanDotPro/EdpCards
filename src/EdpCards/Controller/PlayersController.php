@@ -25,6 +25,11 @@ class PlayersController extends AbstractRestfulController
 
     public function create($data)
     {
+        $email = isset($data['email']) ? $data['email'] : null;
+        $gameId  = $this->params('game_id');
+        $player = $this->getGameService()->joinGame($gameId, $data['displayName'], $email);
+        $this->getResponse()->setStatusCode(201);
+        return new JsonModel;
     }
 
     public function update($id, $data)

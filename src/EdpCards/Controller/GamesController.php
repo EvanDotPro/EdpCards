@@ -27,7 +27,7 @@ class GamesController extends AbstractRestfulController
 
     public function create($data)
     {
-        $email = isset($data['email']) ? $data['email'] : false;
+        $email = isset($data['email']) ? $data['email'] : null;
         $game = $this->getGameService()->createGame($data['name'], $data['decks'], $data['displayName'], $email);
         $this->getResponse()->setStatusCode(201);
         return new JsonModel;
