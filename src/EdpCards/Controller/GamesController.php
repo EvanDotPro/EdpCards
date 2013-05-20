@@ -25,39 +25,19 @@ class GamesController extends AbstractRestfulController
         return new JsonModel($game);
     }
 
-    /**
-     * Create a new resource
-     *
-     * @param  mixed $data
-     * @return mixed
-     */
     public function create($data)
     {
-        $game = $this->getGameService()->createGame($data['name'], $data['decks']);
+        $email = isset($data['email']) ? $data['email'] : false;
+        $game = $this->getGameService()->createGame($data['name'], $data['decks'], $data['displayName'], $email);
         $this->getResponse()->setStatusCode(201);
         return new JsonModel;
     }
 
-    /**
-     * Update an existing resource
-     *
-     * @param  mixed $id
-     * @param  mixed $data
-     * @return mixed
-     */
     public function update($id, $data)
     {
-        //TODO: Implement Method
     }
 
-    /**
-     * Delete an existing resource
-     *
-     * @param  mixed $id
-     * @return mixed
-     */
     public function delete($id)
     {
-        //TODO: Implement Method
     }
 }

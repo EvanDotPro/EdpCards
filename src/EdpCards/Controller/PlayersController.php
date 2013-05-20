@@ -21,43 +21,17 @@ class PlayersController extends AbstractRestfulController
 
     public function get($id)
     {
-        $game = $this->getGameService()->getGame($id);
-        echo json_serialize($game);die();
-
-        return new JsonModel($game);
     }
 
-    /**
-     * Create a new resource
-     *
-     * @param  mixed $data
-     * @return mixed
-     */
     public function create($data)
     {
-        //TODO: Implement Method
     }
 
-    /**
-     * Update an existing resource
-     *
-     * @param  mixed $id
-     * @param  mixed $data
-     * @return mixed
-     */
     public function update($id, $data)
     {
-        //TODO: Implement Method
     }
 
-    /**
-     * Delete an existing resource
-     *
-     * @param  mixed $id
-     * @return mixed
-     */
     public function delete($id)
     {
-        //TODO: Implement Method
     }
 }

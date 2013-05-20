@@ -5,7 +5,7 @@ class Player
 {
     protected $id;
 
-    protected $name;
+    protected $displayName;
 
     protected $email;
 
@@ -34,18 +34,18 @@ class Player
     /**
      * @return string
      */
-    public function getName()
+    public function getDisplayName()
     {
-        return $this->name;
+        return $this->displayName;
     }
 
     /**
-     * @param string $name
+     * @param string $displayName
      * @return Player
      */
-    public function setName($name)
+    public function setDisplayName($displayName)
     {
-        $this->name = $name;
+        $this->displayName = $displayName;
         return $this;
     }
 
@@ -72,7 +72,7 @@ class Player
      */
     public function getPoints()
     {
-        return $this->points;
+        return $this->points ?: 0;
     }
 
     /**

@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `game_card` (
 
 CREATE TABLE IF NOT EXISTS `player` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
+  `display_name` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `points` int(11) NOT NULL DEFAULT '0',
   `game_id` int(11) NOT NULL,

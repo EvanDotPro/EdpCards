@@ -15,10 +15,14 @@ class Player extends AbstractDbMapper
         return $this->select($select);
     }
 
-    public function insertPlayer($player)
+    public function insertPlayer($gameId, $displayName, $email)
     {
+        $player = clone $this->getEntityPrototype();
+        $player->setGameId($gameId);
+        $player->setDisplayName($displayName);
+        $player->setEmail($email);
         $result = $this->insert($player);
-        $entity->setId($result->getGeneratedValue());
-        return $result;
+        $player->setId($result->getGeneratedValue());
+        return $player;
     }
 }

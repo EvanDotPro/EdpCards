@@ -56,4 +56,9 @@ return array(
             'ViewJsonStrategy',
         ),
     ),
+    'swagger' => array(
+        'paths' => array(
+            __DIR__ . '/../src/EdpCards/Controller',
+        ),
+    )
 );
