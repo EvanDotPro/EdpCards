@@ -29,6 +29,7 @@ class PlayersController extends AbstractRestfulController
         $gameId  = $this->params('game_id');
         $player = $this->getGameService()->joinGame($gameId, $data['displayName'], $email);
         $this->getResponse()->setStatusCode(201);
+        // TODO: Return created player entity
         return new JsonModel;
     }
 

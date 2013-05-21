@@ -33,6 +33,7 @@ class Card extends AbstractDbMapper
     public function dealCardsToPlayer($gameId, $playerId, $numberOfCards = 1)
     {
         // TODO: Clean this up, use transactions to prevent race conditions
+        // TODO: Check if there are enough cards to deal
         $select = $this->getSelect('game_card')
             ->join('card', 'card.id = game_card.card_id')
             ->where(array('game_id' => $gameId, 'status' => 'available', 'type' => 'white'));
@@ -40,7 +41,6 @@ class Card extends AbstractDbMapper
 
         $keys = array_rand($results, $numberOfCards);
         foreach ($keys as $key) {
-            print_r($results[$key]);
             $where = array(
                 'card_id' => $results[$key]['card_id'],
                 'game_id' => $gameId,
@@ -50,8 +50,26 @@ class Card extends AbstractDbMapper
                 'player_id' => $playerId,
                 'status' => 'player',
             );
-
             $this->update($data, $where, 'game_card');
         }
+    }
+
+    public function pickBlackCard($gameId)
+    {
+        // TODO: Check if there are no more black cards, and re-shuffle
+        $select = $this->getSelect('game_card')
+            ->join('card', 'card.id = game_card.card_id')
+            ->where(array('game_id' => $gameId, 'status' => 'available', 'type' => 'black'));
+        $results = $this->select($select, new \ArrayObject, new \Zend\Stdlib\Hydrator\ArraySerializable)->toArray();
+
+        $card = $results[array_rand($results)];
+        $where = array(
+            'game_id' => $gameId,
+            'card_id' => $card['card_id'],
+        );
+
+        $this->update(array('status' => 'used'), $where, 'game_card');
+
+        return $card['card_id'];
     }
 }

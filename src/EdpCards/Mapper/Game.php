@@ -31,4 +31,8 @@ class Game extends AbstractDbMapper
         $game->setId($result->getGeneratedValue());
         return $game;
     }
+
+    public function insertRound($gameId)
+    {
+    }
 }
