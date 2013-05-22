@@ -66,14 +66,16 @@ class Game implements GameInterface, SM\ServiceLocatorAwareInterface, EM\EventMa
 
     protected function startRound($gameId)
     {
-        $blackCardId = $this->getCardMapper()->pickBlackCard($gameId);
+        $blackCard = $this->getCardMapper()->pickBlackCard($gameId);
         $players = $this->getPlayersInGame($gameId);
-        $this->getGameMapper()->insertRound($gameId, $blackCardId, null); // @TODO: pick a judge
+        $this->getGameMapper()->insertRound($gameId, $blackCard->getId(), null); // @TODO: pick a judge
         $playerIds = [];
         foreach ($players as $player) {
             $playerIds[] = $player->getId();
         }
-        $this->getCardMapper()->dealCardsToPlayer($gameId, $playerIds, 10);
+        // @TODO: If a player skips a round with 12 cards (draw 2, pick 3), they'll still have 12 cards.
+        $cardsToDeal = ($blackCard->getBlankCount() === 3) ? 12 : 10;
+        $this->getCardMapper()->dealCardsToPlayer($gameId, $playerIds, $cardsToDeal);
     }
 
     protected function getGameMapper()

@@ -71,17 +71,18 @@ class Card extends AbstractDbMapper
         // TODO: Check if there are no more black cards, and re-shuffle
         $select = $this->getSelect('game_card')
             ->join('card', 'card.id = game_card.card_id')
-            ->where(['game_id' => $gameId, 'status' => 'available', 'type' => 'black']);
-        $results = $this->select($select, new \ArrayObject, new ArraySerializable)->toArray();
+            ->where(['game_id' => $gameId, 'status' => 'available', 'type' => 'black'])
+            ->limit(1)
+            ->order(new Expression('RAND()'));
+        $card = $this->select($select)->current();
 
-        $card = $results[array_rand($results)];
         $where = [
             'game_id' => $gameId,
-            'card_id' => $card['card_id'],
+            'card_id' => $card->getId(),
         ];
 
         $this->update(['status' => 'used'], $where, 'game_card');
 
-        return $card['card_id'];
+        return $card;
     }
 }
