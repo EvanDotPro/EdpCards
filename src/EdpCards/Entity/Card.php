@@ -42,4 +42,9 @@ class Card
         $this->text = $text;
         return $this;
     }
+
+    public function getBlankCount()
+    {
+        return substr_count($this->getText(), '____') ?: 1;
+    }
 }

@@ -22,8 +22,8 @@ class Game implements GameInterface, SM\ServiceLocatorAwareInterface, EM\EventMa
     {
         $game = $this->getGameMapper()->insertGame($name);
         $this->getCardMapper()->copyDecksToGame($game->getId(), $decks);
-        $player = $this->joinGame($game->getId(), $displayName, $email);
-        $this->getCardMapper()->dealCardsToPlayer($game->getId(), $player->getId(), 10);
+        $player = $this->joinGame($game->getId(), $displayName, $email, false);
+        $this->startRound($game->getId());
         return $game;
     }
 
@@ -54,11 +54,26 @@ class Game implements GameInterface, SM\ServiceLocatorAwareInterface, EM\EventMa
     /**
      * @return EdpCards\Entity\Player
      */
-    public function joinGame($gameId, $displayName, $email = false)
+    public function joinGame($gameId, $displayName, $email = false, $dealCards = true)
     {
         $player = $this->getPlayerMapper()->insertPlayer($gameId, $displayName, $email);
-        $this->getCardMapper()->dealCardsToPlayer($gameId, $player->getId(), 10);
+        if ($dealCards) {
+            $this->getCardMapper()->dealCardsToPlayer($gameId, [$player->getId()], 10);
+        }
+
         return $player;
+    }
+
+    protected function startRound($gameId)
+    {
+        $blackCardId = $this->getCardMapper()->pickBlackCard($gameId);
+        $players = $this->getPlayersInGame($gameId);
+        $this->getGameMapper()->insertRound($gameId, $blackCardId, null); // @TODO: pick a judge
+        $playerIds = [];
+        foreach ($players as $player) {
+            $playerIds[] = $player->getId();
+        }
+        $this->getCardMapper()->dealCardsToPlayer($gameId, $playerIds, 10);
     }
 
     protected function getGameMapper()

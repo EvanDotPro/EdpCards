@@ -10,7 +10,7 @@ class Player extends AbstractDbMapper
     public function findPlayersByGame($gameId)
     {
         $select = $this->getSelect()
-                       ->where(array('game_id' => $gameId));
+                       ->where(['game_id' => $gameId]);
 
         return $this->select($select);
     }
@@ -23,6 +23,7 @@ class Player extends AbstractDbMapper
         $player->setEmail($email);
         $result = $this->insert($player);
         $player->setId($result->getGeneratedValue());
+
         return $player;
     }
 }

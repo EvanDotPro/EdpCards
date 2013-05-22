@@ -1,64 +1,64 @@
 <?php
-return array(
-    'service_manager' => array(
-        'invokables' => array(
+return [
+    'service_manager' => [
+        'invokables' => [
             'edpcards_gameservice' => 'EdpCards\Service\Game',
-        ),
-        'aliases' => array(
+        ],
+        'aliases' => [
             'edpcards_db' => 'Zend\Db\Adapter\Adapter',
-        ),
-    ),
-    'controllers' => array(
-        'invokables' => array(
+        ],
+    ],
+    'controllers' => [
+        'invokables' => [
             'EdpCards\Controller\Games' => 'EdpCards\Controller\GamesController',
             'EdpCards\Controller\Players' => 'EdpCards\Controller\PlayersController',
-        ),
-    ),
-    'router' => array(
-        'routes' => array(
-            'rest' => array(
+        ],
+    ],
+    'router' => [
+        'routes' => [
+            'rest' => [
                 'type'    => 'Literal',
-                'options' => array(
+                'options' => [
                     'route'    => '/',
-                ),
+                ],
                 'may_terminate' => true,
-                'child_routes' => array(
-                    'games' => array(
+                'child_routes' => [
+                    'games' => [
                         'type'    => 'Segment',
-                        'options' => array(
+                        'options' => [
                             'route'    => 'games[/:game_id]',
-                            'defaults' => array(
+                            'defaults' => [
                                 'controller' => 'EdpCards\Controller\Games',
-                            ),
-                        ),
+                            ],
+                        ],
                         'may_terminate' => true,
-                        'child_routes' => array(
-                            'players' => array(
+                        'child_routes' => [
+                            'players' => [
                                 'type'    => 'Segment',
-                                'options' => array(
+                                'options' => [
                                     'route'    => '/players[/:player_id]',
-                                    'defaults' => array(
+                                    'defaults' => [
                                         'controller' => 'EdpCards\Controller\Players',
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-    'view_manager' => array(
-        'template_path_stack' => array(
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+    'view_manager' => [
+        'template_path_stack' => [
             __DIR__ . '/../view',
-        ),
-        'strategies' => array(
+        ],
+        'strategies' => [
             'ViewJsonStrategy',
-        ),
-    ),
-    'swagger' => array(
-        'paths' => array(
-            __DIR__ . '/../src/EdpCards/Controller',
-        ),
-    )
-);
+        ],
+    ],
+    'swagger' => [
+        'paths' => [
+           __DIR__ . '/../src/EdpCards/Controller',
+        ],
+    ]
+];

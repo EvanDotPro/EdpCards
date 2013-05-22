@@ -4,6 +4,7 @@ namespace EdpCards\Mapper;
 use ZfcBase\Mapper\AbstractDbMapper;
 use Zend\Db\Sql\Expression;
 use Zend\Db\Adapter\Adapter;
+use Zend\Stdlib\Hydrator\ArraySerializable;
 
 class Card extends AbstractDbMapper
 {
@@ -12,7 +13,7 @@ class Card extends AbstractDbMapper
     public function findByDecks($decks)
     {
         $select = $this->getSelect()
-            ->where(array('deck' => $decks));
+            ->where(['deck' => $decks]);
 
         return $this->select($select);
     }
@@ -20,36 +21,47 @@ class Card extends AbstractDbMapper
     public function copyDecksToGame($gameId, $decks)
     {
         $select = $this->getSelect()
-            ->columns(array(
+            ->columns([
                 'game_id' => new Expression( (string) $gameId),
                 'card_id' => 'id',
-            ))
-            ->where(array('deck' => $decks));
+            ])
+            ->where(['deck' => $decks]);
         $select = $select->getSqlString($this->getDbAdapter()->getPlatform());
         $insert = 'INSERT INTO `game_card` (`game_id`, `card_id`) ' . $select . ';';
         $result = $this->getDbAdapter()->query($insert, Adapter::QUERY_MODE_EXECUTE);
     }
 
-    public function dealCardsToPlayer($gameId, $playerId, $numberOfCards = 1)
+    public function dealCardsToPlayer($gameId, $playerIds, $numberOfCards = 10)
     {
-        // TODO: Clean this up, use transactions to prevent race conditions
-        // TODO: Check if there are enough cards to deal
-        $select = $this->getSelect('game_card')
-            ->join('card', 'card.id = game_card.card_id')
-            ->where(array('game_id' => $gameId, 'status' => 'available', 'type' => 'white'));
-        $results = $this->select($select, new \ArrayObject, new \Zend\Stdlib\Hydrator\ArraySerializable)->toArray();
+        foreach ($playerIds as $playerId) {
+            $select = $this->getSelect('game_card')
+                ->columns(['count' => new Expression('COUNT(1)')])
+                ->where(['game_id' => $gameId, 'player_id' => $playerId]);
+            $cardsInHand = (int) $this->select($select, new \ArrayObject, new ArraySerializable)->current()['count'];
 
-        $keys = array_rand($results, $numberOfCards);
-        foreach ($keys as $key) {
-            $where = array(
-                'card_id' => $results[$key]['card_id'],
+            $cardsToDeal = $numberOfCards - $cardsInHand;
+
+            $select = $this->getSelect('game_card')
+                ->join('card', 'card.id = game_card.card_id')
+                ->where(['game_id' => $gameId, 'status' => 'available', 'type' => 'white'])
+                ->limit($cardsToDeal)
+                ->order(new Expression('RAND()')); // TODO: This might get slow once this table is large
+            $results = $this->select($select, new \ArrayObject, new ArraySerializable)->toArray();
+
+            $cardsToAssign = [];
+            foreach ($results as $result) {
+                $cardsToAssign[] = $result['card_id'];
+            }
+
+            $where = [
+                'card_id' => $cardsToAssign,
                 'game_id' => $gameId,
-                'status' => 'available',
-            );
-            $data = array(
+                'status'  => 'available',
+            ];
+            $data = [
                 'player_id' => $playerId,
-                'status' => 'player',
-            );
+                'status'    => 'player',
+            ];
             $this->update($data, $where, 'game_card');
         }
     }
@@ -59,16 +71,16 @@ class Card extends AbstractDbMapper
         // TODO: Check if there are no more black cards, and re-shuffle
         $select = $this->getSelect('game_card')
             ->join('card', 'card.id = game_card.card_id')
-            ->where(array('game_id' => $gameId, 'status' => 'available', 'type' => 'black'));
-        $results = $this->select($select, new \ArrayObject, new \Zend\Stdlib\Hydrator\ArraySerializable)->toArray();
+            ->where(['game_id' => $gameId, 'status' => 'available', 'type' => 'black']);
+        $results = $this->select($select, new \ArrayObject, new ArraySerializable)->toArray();
 
         $card = $results[array_rand($results)];
-        $where = array(
+        $where = [
             'game_id' => $gameId,
             'card_id' => $card['card_id'],
-        );
+        ];
 
-        $this->update(array('status' => 'used'), $where, 'game_card');
+        $this->update(['status' => 'used'], $where, 'game_card');
 
         return $card['card_id'];
     }
