@@ -12,6 +12,7 @@ return [
         'invokables' => [
             'EdpCards\Controller\Games' => 'EdpCards\Controller\GamesController',
             'EdpCards\Controller\Players' => 'EdpCards\Controller\PlayersController',
+            'EdpCards\Controller\Rounds' => 'EdpCards\Controller\RoundsController',
         ],
     ],
     'router' => [
@@ -33,6 +34,15 @@ return [
                         ],
                         'may_terminate' => true,
                         'child_routes' => [
+                            'rounds'  => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => '/rounds[/:round_id]',
+                                    'defaults' => [
+                                        'controller' => 'EdpCards\Controller\Rounds',
+                                    ],
+                                ],
+                            ],
                             'players' => [
                                 'type'    => 'Segment',
                                 'options' => [
@@ -49,9 +59,6 @@ return [
         ],
     ],
     'view_manager' => [
-        'template_path_stack' => [
-            __DIR__ . '/../view',
-        ],
         'strategies' => [
             'ViewJsonStrategy',
         ],
