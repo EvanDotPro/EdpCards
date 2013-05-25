@@ -20,14 +20,14 @@ return [
             'rest' => [
                 'type'    => 'Literal',
                 'options' => [
-                    'route'    => '/',
+                    'route'    => '/api',
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
                     'games' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => 'games[/:game_id]',
+                            'route'    => '/games[/:game_id]',
                             'defaults' => [
                                 'controller' => 'EdpCards\Controller\Games',
                             ],
