@@ -3,6 +3,7 @@ namespace EdpCards\Service;
 
 use Zend\ServiceManager as SM;
 use Zend\EventManager as EM;
+use \Traversable;
 
 class Game implements GameInterface, SM\ServiceLocatorAwareInterface, EM\EventManagerAwareInterface
 {
@@ -46,8 +47,11 @@ class Game implements GameInterface, SM\ServiceLocatorAwareInterface, EM\EventMa
     /**
      * @return EdpCards\Entity\Player[]
      */
-    public function getPlayersInGame($gameId)
+    public function getPlayersInGame($gameId = null)
     {
+        if (!$gameId) {
+            return $this->getPlayerMapper()->findPlayersInActiveGames();
+        }
         return $this->getPlayerMapper()->findPlayersByGame($gameId);
     }
 
@@ -58,14 +62,16 @@ class Game implements GameInterface, SM\ServiceLocatorAwareInterface, EM\EventMa
     {
         $player = $this->getPlayerMapper()->insertPlayer($gameId, $displayName, $email);
         if ($dealCards) {
+            // @TODO: Check the current black card in play and see if we need 10 or 12 cards
             $this->getCardMapper()->dealCardsToPlayer($gameId, [$player->getId()], 10);
         }
 
         return $player;
     }
 
-    protected function startRound($gameId)
+    public function startRound($gameId) // should it be protected? maybe...
     {
+        // @TODO Pick winner, close previous round
         $blackCard = $this->getCardMapper()->pickBlackCard($gameId);
         $players = $this->getPlayersInGame($gameId);
         $this->getGameMapper()->insertRound($gameId, $blackCard->getId(), null); // @TODO: pick a judge

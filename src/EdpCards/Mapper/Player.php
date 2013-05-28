@@ -15,6 +15,15 @@ class Player extends AbstractDbMapper
         return $this->select($select);
     }
 
+    public function findPlayersInActiveGames()
+    {
+        $select = $this->getSelect()
+                       ->join('game', 'game.id = player.game_id')
+                       ->where(['game.status' => 'active']);
+
+        return $this->select($select);
+    }
+
     public function insertPlayer($gameId, $displayName, $email)
     {
         $player = clone $this->getEntityPrototype();
