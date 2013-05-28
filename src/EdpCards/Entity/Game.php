@@ -1,7 +1,7 @@
 <?php
 namespace EdpCards\Entity;
 
-class Game
+class Game extends AbstractEntity
 {
     /**
      * @var int
@@ -17,6 +17,11 @@ class Game
      * @var Player[]
      */
     protected $players;
+
+    /**
+     * @var int
+     */
+    protected $playerCount;
 
     /**
      * @param int $id
@@ -52,5 +57,41 @@ class Game
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @param array|Traversable
+     * @return Game
+     */
+    public function setPlayers($players)
+    {
+        $this->players = $players;
+        return $this;
+    }
+
+    /**
+     * @return Player[]
+     */
+    public function getPlayers()
+    {
+        return $this->players;
+    }
+
+    /**
+     * @param int $playerCount
+     * @return Game
+     */
+    public function setPlayerCount($playerCount)
+    {
+        $this->playerCount = (int) $playerCount;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPlayerCount()
+    {
+        return $this->playerCount;
     }
 }

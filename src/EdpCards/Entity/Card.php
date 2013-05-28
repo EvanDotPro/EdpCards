@@ -1,7 +1,7 @@
 <?php
 namespace EdpCards\Entity;
 
-class Card
+class Card extends AbstractEntity
 {
     protected $id;
 

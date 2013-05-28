@@ -17,8 +17,10 @@ Real (Swagger) documentation coming soon.
 
 | Method | Endpoint                  | Description
 | ------ | ------------------------- | -------------------------------
+| GET    | /players                  | List all players in active games
+| POST   | /players                  | Create a new player (display\_name, email)
 | GET    | /games                    | List all active games
-| POST   | /games                    | Create a new game
-| GET    | /games/{id}               | Get a specific game
+| POST   | /games                    | Create a new game (name, decks[], player\_id)
+| GET    | /games/{id}               | Get a specific game (and players)
 | GET    | /games/{id}/players       | Get all players in a game
-| POST   | /games/{id}/players       | Add/join a player into a game
+| POST   | /games/{id}/players       | Add/join a player into a game (display\_name, email OR player\_id)

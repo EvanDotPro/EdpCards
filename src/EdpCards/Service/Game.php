@@ -5,7 +5,7 @@ use Zend\ServiceManager as SM;
 use Zend\EventManager as EM;
 use \Traversable;
 
-class Game implements GameInterface, SM\ServiceLocatorAwareInterface, EM\EventManagerAwareInterface
+class Game implements SM\ServiceLocatorAwareInterface, EM\EventManagerAwareInterface
 {
     use SM\ServiceLocatorAwareTrait;
     use EM\EventManagerAwareTrait;
@@ -19,13 +19,26 @@ class Game implements GameInterface, SM\ServiceLocatorAwareInterface, EM\EventMa
     /**
      * @return EdpCards\Entity\Game
      */
-    public function createGame($name, $decks, $displayName, $email = false)
+    public function createGame($name, $decks, $playerId)
     {
         $game = $this->getGameMapper()->insertGame($name);
         $this->getCardMapper()->copyDecksToGame($game->getId(), $decks);
-        $player = $this->joinGame($game->getId(), $displayName, $email, false);
+        $this->joinGame($game->getId(), $playerId, false);
         $this->startRound($game->getId());
-        return $game;
+        return $this->getGame($game->getId()); // not very efficient, but oh well
+    }
+
+    /**
+     * @param string $displayName
+     * @param string $email
+     */
+    public function createPlayer($displayName, $email)
+    {
+        $email = strtolower($email);
+        if ($player = $this->getPlayerMapper()->findPlayerByEmail($email)) {
+            return $player;
+        }
+        return $this->getPlayerMapper()->insertPlayer($displayName, $email);
     }
 
     /**
@@ -58,9 +71,11 @@ class Game implements GameInterface, SM\ServiceLocatorAwareInterface, EM\EventMa
     /**
      * @return EdpCards\Entity\Player
      */
-    public function joinGame($gameId, $displayName, $email = false, $dealCards = true)
+    public function joinGame($gameId, $playerId, $dealCards = true)
     {
-        $player = $this->getPlayerMapper()->insertPlayer($gameId, $displayName, $email);
+        $players = $this->getPlayerMapper()->findPlayersByGame($gameId, $playerId);
+        if (count($players)) return $players->current(); // slightly messy to use current() here
+        $player = $this->getPlayerMapper()->insertPlayerToGame($gameId, $playerId);
         if ($dealCards) {
             // @TODO: Check the current black card in play and see if we need 10 or 12 cards
             $this->getCardMapper()->dealCardsToPlayer($gameId, [$player->getId()], 10);

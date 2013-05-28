@@ -1,17 +1,27 @@
 <?php
 namespace EdpCards\Entity;
 
-class Player
+class Player extends AbstractEntity
 {
+    /**
+     * @var int
+     */
     protected $id;
 
+    /**
+     * @var string
+     */
     protected $displayName;
 
+    /**
+     * @var string;
+     */
     protected $email;
 
+    /**
+     * @var int
+     */
     protected $points;
-
-    protected $gameId;
 
     /**
      * @return int
@@ -82,24 +92,6 @@ class Player
     public function setPoints($points)
     {
         $this->points = (int) $points;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getGameId()
-    {
-        return $this->gameId;
-    }
-
-    /**
-     * @param int $gameId
-     * @return Player
-     */
-    public function setGameId($gameId)
-    {
-        $this->gameId = (int) $gameId;
         return $this;
     }
 }

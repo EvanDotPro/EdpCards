@@ -43,14 +43,16 @@ class Card extends AbstractDbMapper
 
             $select = $this->getSelect('game_card')
                 ->join('card', 'card.id = game_card.card_id')
-                ->where(['game_id' => $gameId, 'status' => 'available', 'type' => 'white'])
+                ->where(['game_card.game_id' => $gameId, 'game_card.status' => 'available', 'card.type' => 'white'])
                 ->limit($cardsToDeal)
                 ->order(new Expression('RAND()')); // TODO: This might get slow once this table is large
             $results = $this->select($select, new \ArrayObject, new ArraySerializable)->toArray();
 
+            if (!count($results)) return;
+
             $cardsToAssign = [];
             foreach ($results as $result) {
-                $cardsToAssign[] = $result['card_id'];
+                $cardsToAssign[] = (int) $result['card_id'];
             }
 
             $where = [
@@ -71,7 +73,7 @@ class Card extends AbstractDbMapper
         // TODO: Check if there are no more black cards, and re-shuffle
         $select = $this->getSelect('game_card')
             ->join('card', 'card.id = game_card.card_id')
-            ->where(['game_id' => $gameId, 'status' => 'available', 'type' => 'black'])
+            ->where(['game_card.game_id' => $gameId, 'game_card.status' => 'available', 'card.type' => 'black'])
             ->limit(1)
             ->order(new Expression('RAND()'));
         $card = $this->select($select)->current();

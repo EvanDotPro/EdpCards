@@ -24,6 +24,16 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    'players' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/players',
+                            'defaults' => [
+                                'controller' => 'EdpCards\Controller\Players',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
                     'games' => [
                         'type'    => 'Segment',
                         'options' => [
