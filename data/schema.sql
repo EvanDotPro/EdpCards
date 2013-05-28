@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `game_card` (
 CREATE TABLE IF NOT EXISTS `game_player` (
   `player_id` int(11) NOT NULL,
   `game_id` int(11) NOT NULL,
+  UNIQUE KEY `player_id_2` (`player_id`,`game_id`),
   KEY `player_id` (`player_id`),
   KEY `game_id` (`game_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -53,7 +54,8 @@ CREATE TABLE IF NOT EXISTS `player` (
   `display_name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `points` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 
@@ -64,7 +66,7 @@ ALTER TABLE `game_card`
 
 ALTER TABLE `game_player`
   ADD CONSTRAINT `game_player_ibfk_2` FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `game_player_ibfk_1` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `game_player_ibfk_4` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`) ON DELETE CASCADE;
 
 ALTER TABLE `game_round`
   ADD CONSTRAINT `game_round_ibfk_1` FOREIGN KEY (`game_id`) REFERENCES `game` (`id`) ON DELETE CASCADE,

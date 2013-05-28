@@ -2,7 +2,6 @@
 namespace EdpCards\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
-use Zend\View\Model\JsonModel;
 use EdpCards\Service\GameServiceAwareTrait;
 
 class PlayersController extends AbstractRestfulController
