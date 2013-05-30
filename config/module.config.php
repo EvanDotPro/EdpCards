@@ -27,7 +27,7 @@ return [
                     'players' => [
                         'type'    => 'Segment',
                         'options' => [
-                            'route'    => '/players',
+                            'route'    => '/players[/:player_id]',
                             'defaults' => [
                                 'controller' => 'EdpCards\Controller\Players',
                             ],

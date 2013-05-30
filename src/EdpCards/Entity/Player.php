@@ -26,7 +26,7 @@ class Player extends AbstractEntity
     /**
      * @var Card[]
      */
-    protected $cards;
+    protected $cards = array();
 
     /**
      * @return int

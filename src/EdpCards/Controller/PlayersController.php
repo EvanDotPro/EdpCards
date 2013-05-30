@@ -22,7 +22,11 @@ class PlayersController extends AbstractRestfulController
     public function get($id)
     {
         $gameId  = $this->params('game_id');
-        $player = $this->getGameService()->getPlayerWithCards($gameId, $id);
+        if ($gameId) {
+            $player = $this->getGameService()->getPlayerWithCards($gameId, $id);
+        } else {
+            $player = $this->getGameService()->getPlayer($id);
+        }
         return $this->jsonModel($player);
     }
 
