@@ -33,6 +33,9 @@ class Game extends AbstractDbMapper implements SM\ServiceLocatorAwareInterface
                        ->where(['id' => $gameId]);
 
         $game = $this->select($select)->current();
+        if(!$game)
+        	return false;
+        
         $players = $this->getPlayerMapper()->findPlayersByGame($game->getId());
         $game->setPlayers($players);
         return $game;
