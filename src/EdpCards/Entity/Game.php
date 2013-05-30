@@ -16,7 +16,7 @@ class Game extends AbstractEntity
     /**
      * @var Player[]
      */
-    protected $players;
+    protected $players = array();
 
     /**
      * @var int
