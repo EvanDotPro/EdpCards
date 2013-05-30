@@ -60,6 +60,14 @@ class Game implements SM\ServiceLocatorAwareInterface, EM\EventManagerAwareInter
     }
 
     /**
+     * @return array
+     */
+    public function getDecks()
+    {
+        return $this->getCardMapper()->getDecks();
+    }
+
+    /**
      * @return EdpCards\Entity\Player
      */
     public function getPlayer($playerId)

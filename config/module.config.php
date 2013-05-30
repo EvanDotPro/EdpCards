@@ -13,6 +13,7 @@ return [
             'EdpCards\Controller\Games' => 'EdpCards\Controller\GamesController',
             'EdpCards\Controller\Players' => 'EdpCards\Controller\PlayersController',
             'EdpCards\Controller\Rounds' => 'EdpCards\Controller\RoundsController',
+            'EdpCards\Controller\Decks' => 'EdpCards\Controller\DecksController',
         ],
     ],
     'router' => [
@@ -24,6 +25,16 @@ return [
                 ],
                 'may_terminate' => true,
                 'child_routes' => [
+                    'decks' => [
+                        'type'    => 'Segment',
+                        'options' => [
+                            'route'    => '/decks',
+                            'defaults' => [
+                                'controller' => 'EdpCards\Controller\Decks',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                    ],
                     'players' => [
                         'type'    => 'Segment',
                         'options' => [

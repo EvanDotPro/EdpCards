@@ -10,6 +10,26 @@ class Card extends AbstractDbMapper
 {
     protected $tableName  = 'card';
 
+    protected $deckNames = array(
+        'v2' => 'Latest version of the standard CAH deck',
+        'php' => 'Funny PHP-related add-on cards',
+    );
+
+    public function getDecks()
+    {
+        $select = $this->getSelect()
+                       ->columns(['id' => 'deck', 'count' => new Expression('COUNT(1)')])
+                       ->group('deck');
+        $decks = $this->select($select, new \ArrayObject, new ArraySerializable)->toArray();
+
+        foreach ($decks as $i => $deck) {
+            $decks[$i]['count'] = (int) $decks[$i]['count'];
+            $decks[$i]['name'] = $this->deckNames[$deck['id']];
+        }
+
+        return $decks;
+    }
+
     public function findByDecks($decks)
     {
         $select = $this->getSelect()
