@@ -18,6 +18,7 @@ class Module
                     $hydrator = new ClassMethods;
                     $hydrator->addFilter('getPlayers', new MethodMatchFilter('getPlayers'), FilterComposite::CONDITION_AND);
                     $hydrator->addFilter('getPlayerCount', new MethodMatchFilter('getPlayerCount'), FilterComposite::CONDITION_AND);
+                    $hydrator->addFilter('getDecks', new MethodMatchFilter('getDecks'), FilterComposite::CONDITION_AND);
                     $mapper->setHydrator($hydrator);
                     return $mapper;
                 },

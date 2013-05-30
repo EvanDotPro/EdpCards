@@ -24,6 +24,11 @@ class Game extends AbstractEntity
     protected $playerCount;
 
     /**
+     * @var array
+     */
+    protected $decks;
+
+    /**
      * @param int $id
      * @return Game
      */
@@ -93,5 +98,23 @@ class Game extends AbstractEntity
     public function getPlayerCount()
     {
         return $this->playerCount;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDecks()
+    {
+        return $this->decks;
+    }
+
+    /**
+     * @param array $decks
+     * @return Game
+     */
+    public function setDecks($decks)
+    {
+        $this->decks = $decks;
+        return $this;
     }
 }
