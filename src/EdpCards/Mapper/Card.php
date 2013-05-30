@@ -24,7 +24,7 @@ class Card extends AbstractDbMapper
 
         foreach ($decks as $i => $deck) {
             $decks[$i]['count'] = (int) $decks[$i]['count'];
-            $decks[$i]['description'] = $this->deckDescriptions[$deck['id']];
+            $decks[$i]['description'] = isset($this->deckDescriptions[$deck['id']]) ? $this->deckDescriptions[$deck['id']] : null;
         }
 
         return $decks;
