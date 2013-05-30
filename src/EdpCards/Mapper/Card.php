@@ -18,6 +18,16 @@ class Card extends AbstractDbMapper
         return $this->select($select);
     }
 
+    public function findCardsByGameAndPlayer($gameId, $playerId)
+    {
+        $select = $this->getSelect('game_card')
+                       ->join('card', 'card.id = game_card.card_id')
+                       ->where(['game_card.game_id' => $gameId])
+                       ->where(['game_card.player_id' => $playerId]);
+        $cards = $this->select($select);
+        return $cards;
+    }
+
     public function copyDecksToGame($gameId, $decks)
     {
         $select = $this->getSelect()

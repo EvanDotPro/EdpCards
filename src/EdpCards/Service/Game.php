@@ -54,7 +54,20 @@ class Game implements SM\ServiceLocatorAwareInterface, EM\EventManagerAwareInter
      */
     public function getGame($gameId)
     {
-        return $this->getGameMapper()->findById($gameId);
+        $game = $this->getGameMapper()->findById($gameId);
+
+
+    }
+
+    /**
+     * @return EdpCards\Entity\Player
+     */
+    public function getPlayerWithCards($gameId, $playerId)
+    {
+        $player = $this->getPlayerMapper()->findPlayerById($playerId);
+        $cards = $this->getCardMapper()->findCardsByGameAndPlayer($gameId, $playerId);
+        $player->setCards($cards);
+        return $player;
     }
 
     /**

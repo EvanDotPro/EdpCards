@@ -21,6 +21,9 @@ class PlayersController extends AbstractRestfulController
 
     public function get($id)
     {
+        $gameId  = $this->params('game_id');
+        $player = $this->getGameService()->getPlayerWithCards($gameId, $id);
+        return $this->jsonModel($player);
     }
 
     public function create($data)

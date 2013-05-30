@@ -24,6 +24,11 @@ class Player extends AbstractEntity
     protected $points;
 
     /**
+     * @var Card[]
+     */
+    protected $cards;
+
+    /**
      * @return int
      */
     public function getId()
@@ -92,6 +97,24 @@ class Player extends AbstractEntity
     public function setPoints($points)
     {
         $this->points = (int) $points;
+        return $this;
+    }
+
+    /**
+     * @return Card[]
+     */
+    public function getCards()
+    {
+        return $this->cards;
+    }
+
+    /**
+     * @param $cards
+     * @return Player
+     */
+    public function setCards($cards)
+    {
+        $this->cards = $cards;
         return $this;
     }
 }
