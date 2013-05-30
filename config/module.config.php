@@ -26,7 +26,7 @@ return [
                 'may_terminate' => true,
                 'child_routes' => [
                     'decks' => [
-                        'type'    => 'Segment',
+                        'type'    => 'Literal',
                         'options' => [
                             'route'    => '/decks',
                             'defaults' => [
@@ -34,6 +34,17 @@ return [
                             ],
                         ],
                         'may_terminate' => true,
+                    ],
+                    'games-decks' => [
+                        'type'    => 'Literal',
+                        'options' => [
+                            'route'    => '/games/decks',
+                            'defaults' => [
+                                'controller' => 'EdpCards\Controller\Decks',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'priority' => 100,
                     ],
                     'players' => [
                         'type'    => 'Segment',
