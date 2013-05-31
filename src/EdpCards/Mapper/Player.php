@@ -40,7 +40,8 @@ class Player extends AbstractDbMapper
         $select = $this->getSelect()
                        ->join('game_player', 'game_player.player_id = player.id')
                        ->join('game', 'game.id = game_player.game_id')
-                       ->where(['game.status' => 'active']);
+                       ->where(['game.status' => 'active'])
+                       ->group('player.id');
 
         return $this->select($select);
     }
