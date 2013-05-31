@@ -56,7 +56,7 @@ class Game implements SM\ServiceLocatorAwareInterface, EM\EventManagerAwareInter
     {
         $game = $this->getGameMapper()->findById($gameId);
 
-
+	return $game;
     }
 
     /**

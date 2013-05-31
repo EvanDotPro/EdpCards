@@ -81,6 +81,14 @@ class Player extends AbstractEntity
         $this->email = $email;
         return $this;
     }
+    
+    /**
+     * @return string
+     */
+    public function getEmailHash()
+    {
+        return md5($this->email);
+    }
 
     /**
      * @return int

@@ -12,6 +12,7 @@ class Game extends AbstractDbMapper implements SM\ServiceLocatorAwareInterface
     protected $tableName  = 'game';
 
     protected $playerMapper;
+    protected $cardMapper;
 
     public function findActiveGames()
     {
@@ -33,8 +34,23 @@ class Game extends AbstractDbMapper implements SM\ServiceLocatorAwareInterface
                        ->where(['id' => $gameId]);
 
         $game = $this->select($select)->current();
-        $players = $this->getPlayerMapper()->findPlayersByGame($game->getId());
+        if(!$game)
+            return false;
+        
+        $players = array();
+        foreach($this->getPlayerMapper()->findPlayersByGame($game->getId()) as $player) {
+            $players[] = $player;
+        }
         $game->setPlayers($players);
+        
+        foreach($game->getPlayers() as $player) {
+            $cards = array();
+            foreach($this->getCardMapper()->findCardsByGameAndPlayer($game->id, $player->id) as $card) {
+                $cards[] = $card;
+            }
+            $player->setCards($cards);
+        }
+        
         return $game;
     }
 
@@ -65,5 +81,14 @@ class Game extends AbstractDbMapper implements SM\ServiceLocatorAwareInterface
         }
 
         return $this->playerMapper;
+    }
+    
+    protected function getCardMapper()
+    {
+        if (!$this->cardMapper) {
+            $this->cardMapper = $this->getServiceLocator()->get('edpcards_cardmapper');
+        }
+
+        return $this->cardMapper;
     }
 }
