@@ -8,7 +8,10 @@ use Zend\Stdlib\Hydrator\ArraySerializable;
 
 class Game extends AbstractDbMapper implements SM\ServiceLocatorAwareInterface
 {
-    use SM\ServiceLocatorAwareTrait;
+    /**
+     * @var SM\ServiceLocatorInterface
+     */
+    protected $serviceLocator = null;
 
     protected $tableName  = 'game';
 
@@ -86,5 +89,28 @@ class Game extends AbstractDbMapper implements SM\ServiceLocatorAwareInterface
         }
 
         return $return;
+    }
+
+    /**
+     * Set service locator
+     *
+     * @param SM\ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function setServiceLocator(SM\ServiceLocatorInterface $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+
+        return $this;
+    }
+
+    /**
+     * Get service locator
+     *
+     * @return SM\ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator;
     }
 }

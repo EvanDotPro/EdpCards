@@ -18,8 +18,8 @@ class Card extends AbstractDbMapper
     public function getDecks()
     {
         $select = $this->getSelect()
-                       ->columns(['id' => 'deck', 'count' => new Expression('COUNT(1)')])
-                       ->where(['enabled' => 1])
+                       ->columns(array('id' => 'deck', 'count' => new Expression('COUNT(1)')))
+                       ->where(array('enabled' => 1))
                        ->group('deck');
         $decks = $this->select($select, new \ArrayObject, new ArraySerializable)->toArray();
 
@@ -34,14 +34,14 @@ class Card extends AbstractDbMapper
     public function findById($cardId)
     {
         $select = $this->getSelect()
-                       ->where(['id' => $cardId]);
+                       ->where(array('id' => $cardId));
         return $this->select($select)->current();
     }
 
     public function findByDecks($decks)
     {
         $select = $this->getSelect()
-            ->where(['deck' => $decks]);
+            ->where(array('deck' => $decks));
 
         return $this->select($select);
     }
@@ -50,8 +50,7 @@ class Card extends AbstractDbMapper
     {
         $select = $this->getSelect('game_card')
                        ->join('card', 'card.id = game_card.card_id')
-                       ->where(['game_card.game_id' => $gameId])
-                       ->where(['game_card.player_id' => $playerId]);
+                       ->where(array('game_card.game_id' => $gameId, 'game_card.player_id' => $playerId));
         $cards = $this->select($select);
         return $cards;
     }
@@ -59,12 +58,11 @@ class Card extends AbstractDbMapper
     public function copyDecksToGame($gameId, $decks)
     {
         $select = $this->getSelect()
-            ->columns([
+            ->columns(array(
                 'game_id' => new Expression( (string) $gameId),
                 'card_id' => 'id',
-            ])
-            ->where(['enabled' => 1])
-            ->where(['deck' => $decks]);
+            ))
+            ->where(array('enabled' => 1, 'decks' => $decks));
         $select = $select->getSqlString($this->getDbAdapter()->getPlatform());
         $insert = 'INSERT INTO `game_card` (`game_id`, `card_id`) ' . $select . ';';
         $result = $this->getDbAdapter()->query($insert, Adapter::QUERY_MODE_EXECUTE);
@@ -74,15 +72,16 @@ class Card extends AbstractDbMapper
     {
         foreach ($playerIds as $playerId) {
             $select = $this->getSelect('game_card')
-                ->columns(['count' => new Expression('COUNT(1)')])
-                ->where(['game_id' => $gameId, 'player_id' => $playerId]);
-            $cardsInHand = (int) $this->select($select, new \ArrayObject, new ArraySerializable)->current()['count'];
+                ->columns(array('count' => new Expression('COUNT(1)')))
+                ->where(array('game_id' => $gameId, 'player_id' => $playerId));
+            $cardsInHand = (int) $this->select($select, new \ArrayObject, new ArraySerializable)->current();
+            $cardsInHand = (int) $cardsInHand['count'];
 
             $cardsToDeal = $numberOfCards - $cardsInHand;
 
             $select = $this->getSelect('game_card')
                 ->join('card', 'card.id = game_card.card_id')
-                ->where(['game_card.game_id' => $gameId, 'game_card.status' => 'available', 'card.type' => 'white'])
+                ->where(array('game_card.game_id' => $gameId, 'game_card.status' => 'available', 'card.type' => 'white'))
                 ->limit($cardsToDeal)
                 ->order(new Expression('RAND()')); // TODO: This might get slow once this table is large
             $results = $this->select($select, new \ArrayObject, new ArraySerializable)->toArray();
@@ -112,7 +111,7 @@ class Card extends AbstractDbMapper
         // TODO: Check if there are no more black cards, and re-shuffle
         $select = $this->getSelect('game_card')
             ->join('card', 'card.id = game_card.card_id')
-            ->where(['game_card.game_id' => $gameId, 'game_card.status' => 'available', 'card.type' => 'black', 'card.enabled' => 1])
+            ->where(array('game_card.game_id' => $gameId, 'game_card.status' => 'available', 'card.type' => 'black', 'card.enabled' => 1))
             ->limit(1)
             ->order(new Expression('RAND()'));
         $card = $this->select($select)->current();
@@ -122,7 +121,7 @@ class Card extends AbstractDbMapper
             'card_id' => $card->getId(),
         ];
 
-        $this->update(['status' => 'used'], $where, 'game_card');
+        $this->update(array('status' => 'used'), $where, 'game_card');
 
         return $card;
     }
