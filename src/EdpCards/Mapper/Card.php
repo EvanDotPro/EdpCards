@@ -93,15 +93,15 @@ class Card extends AbstractDbMapper
                 $cardsToAssign[] = (int) $result['card_id'];
             }
 
-            $where = [
+            $where = array(
                 'card_id' => $cardsToAssign,
                 'game_id' => $gameId,
                 'status'  => 'available',
-            ];
-            $data = [
+            );
+            $data = array(
                 'player_id' => $playerId,
                 'status'    => 'player',
-            ];
+            );
             $this->update($data, $where, 'game_card');
         }
     }
@@ -116,10 +116,10 @@ class Card extends AbstractDbMapper
             ->order(new Expression('RAND()'));
         $card = $this->select($select)->current();
 
-        $where = [
+        $where = array(
             'game_id' => $gameId,
             'card_id' => $card->getId(),
-        ];
+        );
 
         $this->update(array('status' => 'used'), $where, 'game_card');
 
