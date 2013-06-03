@@ -6,8 +6,6 @@ use \Traversable;
 
 class Game implements SM\ServiceLocatorAwareInterface
 {
-    use SM\ServiceLocatorAwareTrait;
-
     protected $gameMapper;
 
     protected $playerMapper;
