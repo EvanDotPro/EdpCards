@@ -133,7 +133,7 @@ class Game implements SM\ServiceLocatorAwareInterface
         $player = $this->getPlayerMapper()->insertPlayerToGame($gameId, $playerId);
         if ($dealCards) {
             // @TODO: Check the current black card in play and see if we need 10 or 12 cards
-            $this->getCardMapper()->dealCardsToPlayer($gameId, [$player->getId()], 10);
+            $this->getCardMapper()->dealCardsToPlayer($gameId, array($player->getId()), 10);
         }
 
         return $player;
