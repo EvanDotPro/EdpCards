@@ -1,9 +1,6 @@
 <?php
 namespace EdpCards\Controller;
 
-use Zend\Mvc\Controller\AbstractRestfulController;
-use Zend\View\Model\JsonModel;
-
 class RoundsController extends AbstractRestfulController
 {
     protected $identifierName = 'round_id';
