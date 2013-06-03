@@ -10,7 +10,7 @@ class Player extends AbstractDbMapper
     public function findPlayerByEmail($email)
     {
         $select = $this->getSelect()
-                       ->where(['email' => $email]);
+                       ->where(array('email' => $email));
 
         return $this->select($select)->current();
     }
@@ -18,7 +18,7 @@ class Player extends AbstractDbMapper
     public function findPlayerById($playerId)
     {
         $select = $this->getSelect()
-                       ->where(['id' => $playerId]);
+                       ->where(array('id' => $playerId));
 
         return $this->select($select)->current();
     }
@@ -27,9 +27,9 @@ class Player extends AbstractDbMapper
     {
         $select = $this->getSelect()
                        ->join('game_player', 'game_player.player_id = player.id')
-                       ->where(['game_player.game_id' => $gameId]);
+                       ->where(array('game_player.game_id' => $gameId));
         if ($playerId) {
-            $select->where(['player.id' => $playerId]);
+            $select->where(array('player.id' => $playerId));
         }
 
         return $this->select($select);
@@ -40,7 +40,7 @@ class Player extends AbstractDbMapper
         $select = $this->getSelect()
                        ->join('game_player', 'game_player.player_id = player.id')
                        ->join('game', 'game.id = game_player.game_id')
-                       ->where(['game.status' => 'active'])
+                       ->where(array('game.status' => 'active'))
                        ->group('player.id');
 
         return $this->select($select);
@@ -63,7 +63,7 @@ class Player extends AbstractDbMapper
 
     public function insertPlayerToGame($gameId, $playerId)
     {
-        $this->insert(['game_id' => $gameId, 'player_id' => $playerId], 'game_player');
+        $this->insert(array('game_id' => $gameId, 'player_id' => $playerId), 'game_player');
         return $this->findPlayerById($playerId);
     }
 }
