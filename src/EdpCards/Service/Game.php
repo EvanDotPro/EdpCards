@@ -2,19 +2,22 @@
 namespace EdpCards\Service;
 
 use Zend\ServiceManager as SM;
-use Zend\EventManager as EM;
 use \Traversable;
 
-class Game implements SM\ServiceLocatorAwareInterface, EM\EventManagerAwareInterface
+class Game implements SM\ServiceLocatorAwareInterface
 {
     use SM\ServiceLocatorAwareTrait;
-    use EM\EventManagerAwareTrait;
 
     protected $gameMapper;
 
     protected $playerMapper;
 
     protected $cardMapper;
+
+    /**
+     * @var SM\ServiceLocatorInterface
+     */
+    protected $serviceLocator = null;
 
     /**
      * @return EdpCards\Entity\Game
@@ -178,5 +181,28 @@ class Game implements SM\ServiceLocatorAwareInterface, EM\EventManagerAwareInter
         }
 
         return $this->cardMapper;
+    }
+
+    /**
+     * Set service locator
+     *
+     * @param SM\ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function setServiceLocator(SM\ServiceLocatorInterface $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+
+        return $this;
+    }
+
+    /**
+     * Get service locator
+     *
+     * @return SM\ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator;
     }
 }
