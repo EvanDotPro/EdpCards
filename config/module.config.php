@@ -49,7 +49,7 @@ return array(
                     'players' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/playersarray(/:player_id)',
+                            'route'    => '/players[/:player_id]',
                             'defaults' => array(
                                 'controller' => 'EdpCards\Controller\Players',
                             ),
@@ -59,7 +59,7 @@ return array(
                     'games' => array(
                         'type'    => 'Segment',
                         'options' => array(
-                            'route'    => '/gamesarray(/:game_id)',
+                            'route'    => '/games[/:game_id]',
                             'defaults' => array(
                                 'controller' => 'EdpCards\Controller\Games',
                             ),
@@ -69,7 +69,7 @@ return array(
                             'rounds'  => array(
                                 'type' => 'Segment',
                                 'options' => array(
-                                    'route' => '/roundsarray(/:round_id)',
+                                    'route' => '/rounds[/:round_id]',
                                     'defaults' => array(
                                         'controller' => 'EdpCards\Controller\Rounds',
                                     ),
@@ -78,7 +78,7 @@ return array(
                             'players' => array(
                                 'type'    => 'Segment',
                                 'options' => array(
-                                    'route'    => '/playersarray(/:player_id)',
+                                    'route'    => '/players[/:player_id]',
                                     'defaults' => array(
                                         'controller' => 'EdpCards\Controller\Players',
                                     ),
