@@ -74,7 +74,7 @@ class Card extends AbstractDbMapper
             $select = $this->getSelect('game_card')
                 ->columns(array('count' => new Expression('COUNT(1)')))
                 ->where(array('game_id' => $gameId, 'player_id' => $playerId));
-            $cardsInHand = (int) $this->select($select, new \ArrayObject, new ArraySerializable)->current();
+            $cardsInHand = $this->select($select, new \ArrayObject, new ArraySerializable)->current();
             $cardsInHand = (int) $cardsInHand['count'];
 
             $cardsToDeal = $numberOfCards - $cardsInHand;
