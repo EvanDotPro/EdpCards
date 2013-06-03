@@ -144,7 +144,7 @@ class Game implements SM\ServiceLocatorAwareInterface, EM\EventManagerAwareInter
         $blackCard = $this->getCardMapper()->pickBlackCard($gameId);
         $players = $this->getPlayersInGame($gameId);
         $this->getGameMapper()->insertRound($gameId, $blackCard->getId(), null); // @TODO: pick a judge
-        $playerIds = [];
+        $playerIds = array();
         foreach ($players as $player) {
             $playerIds[] = $player->getId();
         }

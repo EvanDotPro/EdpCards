@@ -40,7 +40,7 @@ abstract class AbstractRestfulController extends ZfRestController
     protected function toArray($value)
     {
         if (is_array($value) or $value instanceof \Traversable) {
-            $return = [];
+            $return = array();
             foreach ($value as $key => $item) {
                 $return[$key] = $this->toArray($item);
             }

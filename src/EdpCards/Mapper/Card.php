@@ -89,7 +89,7 @@ class Card extends AbstractDbMapper
 
             if (!count($results)) return;
 
-            $cardsToAssign = [];
+            $cardsToAssign = array();
             foreach ($results as $result) {
                 $cardsToAssign[] = (int) $result['card_id'];
             }
