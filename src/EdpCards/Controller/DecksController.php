@@ -1,14 +1,8 @@
 <?php
 namespace EdpCards\Controller;
 
-use Zend\Mvc\Controller\AbstractRestfulController;
-use EdpCards\Service\GameServiceAwareTrait;
-
 class DecksController extends AbstractRestfulController
 {
-    use GameServiceAwareTrait;
-    use HydratorAwareTrait;
-
     public function getList()
     {
         $decks = $this->getGameService()->getDecks();

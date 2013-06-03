@@ -1,103 +1,103 @@
 <?php
-return [
-    'service_manager' => [
-        'invokables' => [
+return array(
+    'service_manager' => array(
+        'invokables' => array(
             'edpcards_gameservice' => 'EdpCards\Service\Game',
-        ],
-        'aliases' => [
+        ),
+        'aliases' => array(
             'edpcards_db' => 'Zend\Db\Adapter\Adapter',
-        ],
-    ],
-    'controllers' => [
-        'invokables' => [
-            'EdpCards\Controller\Games' => 'EdpCards\Controller\GamesController',
+        ),
+    ),
+    'controllers' => array(
+        'invokables' => array(
+            'EdpCards\Controller\Games'   => 'EdpCards\Controller\GamesController',
             'EdpCards\Controller\Players' => 'EdpCards\Controller\PlayersController',
-            'EdpCards\Controller\Rounds' => 'EdpCards\Controller\RoundsController',
-            'EdpCards\Controller\Decks' => 'EdpCards\Controller\DecksController',
-        ],
-    ],
-    'router' => [
-        'routes' => [
-            'rest' => [
+            'EdpCards\Controller\Rounds'  => 'EdpCards\Controller\RoundsController',
+            'EdpCards\Controller\Decks'   => 'EdpCards\Controller\DecksController',
+        ),
+    ),
+    'router' => array(
+        'routes' => array(
+            'rest' => array(
                 'type'    => 'Literal',
-                'options' => [
+                'options' => array(
                     'route'    => '/api',
-                ],
+                ),
                 'may_terminate' => true,
-                'child_routes' => [
-                    'decks' => [
+                'child_routes' => array(
+                    'decks' => array(
                         'type'    => 'Literal',
-                        'options' => [
+                        'options' => array(
                             'route'    => '/decks',
-                            'defaults' => [
+                            'defaults' => array(
                                 'controller' => 'EdpCards\Controller\Decks',
-                            ],
-                        ],
+                            ),
+                        ),
                         'may_terminate' => true,
-                    ],
-                    'games-decks' => [
+                    ),
+                    'games-decks' => array(
                         'type'    => 'Literal',
-                        'options' => [
+                        'options' => array(
                             'route'    => '/games/decks',
-                            'defaults' => [
+                            'defaults' => array(
                                 'controller' => 'EdpCards\Controller\Decks',
-                            ],
-                        ],
+                            ),
+                        ),
                         'may_terminate' => true,
                         'priority' => 100,
-                    ],
-                    'players' => [
+                    ),
+                    'players' => array(
                         'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/players[/:player_id]',
-                            'defaults' => [
+                        'options' => array(
+                            'route'    => '/playersarray(/:player_id)',
+                            'defaults' => array(
                                 'controller' => 'EdpCards\Controller\Players',
-                            ],
-                        ],
+                            ),
+                        ),
                         'may_terminate' => true,
-                    ],
-                    'games' => [
+                    ),
+                    'games' => array(
                         'type'    => 'Segment',
-                        'options' => [
-                            'route'    => '/games[/:game_id]',
-                            'defaults' => [
+                        'options' => array(
+                            'route'    => '/gamesarray(/:game_id)',
+                            'defaults' => array(
                                 'controller' => 'EdpCards\Controller\Games',
-                            ],
-                        ],
+                            ),
+                        ),
                         'may_terminate' => true,
-                        'child_routes' => [
-                            'rounds'  => [
+                        'child_routes' => array(
+                            'rounds'  => array(
                                 'type' => 'Segment',
-                                'options' => [
-                                    'route' => '/rounds[/:round_id]',
-                                    'defaults' => [
+                                'options' => array(
+                                    'route' => '/roundsarray(/:round_id)',
+                                    'defaults' => array(
                                         'controller' => 'EdpCards\Controller\Rounds',
-                                    ],
-                                ],
-                            ],
-                            'players' => [
+                                    ),
+                                ),
+                            ),
+                            'players' => array(
                                 'type'    => 'Segment',
-                                'options' => [
-                                    'route'    => '/players[/:player_id]',
-                                    'defaults' => [
+                                'options' => array(
+                                    'route'    => '/playersarray(/:player_id)',
+                                    'defaults' => array(
                                         'controller' => 'EdpCards\Controller\Players',
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ],
-    ],
-    'view_manager' => [
-        'strategies' => [
+                                    ),
+                                ),
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    ),
+    'view_manager' => array(
+        'strategies' => array(
             'ViewJsonStrategy',
-        ],
-    ],
-    'swagger' => [
-        'paths' => [
+        ),
+    ),
+    'swagger' => array(
+        'paths' => array(
            __DIR__ . '/../src/EdpCards/Controller',
-        ],
-    ]
-];
+        ),
+    )
+);

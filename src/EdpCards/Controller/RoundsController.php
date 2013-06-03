@@ -3,13 +3,9 @@ namespace EdpCards\Controller;
 
 use Zend\Mvc\Controller\AbstractRestfulController;
 use Zend\View\Model\JsonModel;
-use EdpCards\Service\GameServiceAwareTrait;
 
 class RoundsController extends AbstractRestfulController
 {
-    use GameServiceAwareTrait;
-    use HydratorAwareTrait;
-
     protected $identifierName = 'round_id';
 
     public function getList()

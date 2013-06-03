@@ -9,8 +9,8 @@ class Module
 {
     public function getServiceConfig()
     {
-        return [
-            'factories' => [
+        return array(
+            'factories' => array(
                 'edpcards_gamemapper' => function($sm) {
                     $mapper = new Mapper\Game;
                     $mapper->setDbAdapter($sm->get('edpcards_db'));
@@ -38,8 +38,8 @@ class Module
                     $mapper->setEntityPrototype(new Entity\Card);
                     return $mapper;
                 },
-            ],
-        ];
+            ),
+        );
     }
 
     public function getConfig()
@@ -49,12 +49,12 @@ class Module
 
     public function getAutoloaderConfig()
     {
-        return [
-            'Zend\Loader\StandardAutoloader' => [
-                'namespaces' => [
+        return array(
+            'Zend\Loader\StandardAutoloader' => array(
+                'namespaces' => array(
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
-                ],
-            ],
-        ];
+                ),
+            ),
+        );
     }
 }

@@ -1,14 +1,8 @@
 <?php
 namespace EdpCards\Controller;
 
-use Zend\Mvc\Controller\AbstractRestfulController;
-use EdpCards\Service\GameServiceAwareTrait;
-
 class GamesController extends AbstractRestfulController
 {
-    use GameServiceAwareTrait;
-    use HydratorAwareTrait;
-
     protected $identifierName = 'game_id';
 
     public function getList()
