@@ -1,6 +1,8 @@
 <?php
 namespace EdpCards\Controller;
 
+use Zend\View\Model\JsonModel;
+
 class RoundsController extends AbstractRestfulController
 {
     protected $identifierName = 'round_id';
@@ -25,13 +27,14 @@ class RoundsController extends AbstractRestfulController
     {
         $this->getGameService()->startRound($this->params('game_id'));
         $this->getResponse()->setStatusCode(201);
-        // TODO: Return created game entity
         return new JsonModel;
     }
 
-    public function update($id, $data)
+    public function update($roundId, $data)
     {
-
+        // this is messy -- not really updating a "round" exactly...
+        $result = $this->getGameService()->submitAnswers($roundId, $data['player_id'], $data['card_ids'], $this->params('game_id'));
+        return new JsonModel();
     }
 
     public function delete($id)

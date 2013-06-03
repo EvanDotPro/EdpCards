@@ -60,6 +60,15 @@ class Game extends AbstractDbMapper implements SM\ServiceLocatorAwareInterface
         return $this->select($select, new \ArrayObject, new ArraySerializable)->current();
     }
 
+    public function findRound($roundId)
+    {
+        $select = $this->getSelect('game_round')
+             ->where(array('id' => $roundId))
+             ->limit(1);
+
+        return $this->select($select, new \ArrayObject, new ArraySerializable)->current();
+    }
+
     public function insertRound($gameId, $blackCardId, $judgeId)
     {
         $data = array(
@@ -69,6 +78,25 @@ class Game extends AbstractDbMapper implements SM\ServiceLocatorAwareInterface
         );
 
         $this->insert($data, 'game_round');
+    }
+
+    public function insertPlayerAnswer($roundId, $playerId, $cardId)
+    {
+        $data = array(
+            'round_id'  => $roundId,
+            'player_id' => $playerId,
+            'card_id'   => $cardId,
+        );
+
+        $this->insert($data, 'game_round_card');
+    }
+
+    public function hasPlayerAnswered($roundId, $playerId)
+    {
+        $select = $this->getSelect('game_round_card')
+             ->where(array('round_id' => $roundId, 'player_id' => $playerId));
+
+        return (bool) $this->select($select, new \ArrayObject, new ArraySerializable)->current();
     }
 
     protected function getPlayerMapper()

@@ -106,12 +106,40 @@ class Card extends AbstractDbMapper
         }
     }
 
+    public function playerHasCards($gameId, $playerId, $cardIds)
+    {
+        $select = $this->getSelect('game_card')
+            ->where(array(
+                'game_id'   => $gameId,
+                'player_id' => $playerId,
+                'card_id'   => $cardIds
+            ));
+        $results = $this->select($select, new \ArrayObject, new ArraySerializable)->toArray();
+
+        return (count($cardIds) === count($results));
+    }
+
+    public function markCardsAsUsed($gameId, $cardIds, $playerId)
+    {
+            $where = array(
+                'game_id'   => $gameId,
+                'card_id'   => $cardIds,
+                'player_id' => $playerId
+            );
+            $data = array(
+                'player_id' => null,
+                'status'    => 'used',
+            );
+
+            return $this->update($data, $where, 'game_card');
+    }
+
     public function pickBlackCard($gameId)
     {
         // TODO: Check if there are no more black cards, and re-shuffle
         $select = $this->getSelect('game_card')
             ->join('card', 'card.id = game_card.card_id')
-            ->where(array('game_card.game_id' => $gameId, 'game_card.status' => 'available', 'card.type' => 'black', 'card.enabled' => 1))
+            ->where(array('game_card.game_id' => $gameId, 'game_card.status' => 'available', 'card.type' => 'black', 'card.enabled' => 1,'card.id' => 4))
             ->limit(1)
             ->order(new Expression('RAND()'));
         $card = $this->select($select)->current();

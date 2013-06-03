@@ -59,16 +59,19 @@ class Game implements SM\ServiceLocatorAwareInterface
         return $games;
     }
 
-    public function getRoundInfo($gameId, $roundId = null)
+    public function getRoundInfo($gameId = null, $roundId = null)
     {
-        if (!$roundId) {
-            $currentRound = $this->getGameMapper()->getCurrentRound($gameId);
-        } else {
-            // todo: specific rounds
+        if (!$roundId && $gameId) {
+            $round = $this->getGameMapper()->getCurrentRound($gameId);
+        } elseif ($roundId) {
+            // ignores gameId
+            $round = $this->getGameMapper()->findRound($roundId);
         }
 
         $data = array(
-            'black_card' => $this->getCardMapper()->findById($currentRound['card_id']),
+            'round_id'   => $round['id'],
+            'game_id'    => $round['game_id'],
+            'black_card' => $this->getCardMapper()->findById($round['card_id']),
         );
 
         return $data;
@@ -137,6 +140,42 @@ class Game implements SM\ServiceLocatorAwareInterface
         }
 
         return $player;
+    }
+
+    public function submitAnswers($roundId, $playerId, $cardIds, $gameId = false)
+    {
+        if (!$gameId) {
+            $round = $this->getRoundInfo(null, $roundId); // round they submitted answer for
+            $gameId = $round['game_id'];
+        }
+
+        $latestRound = $this->getRoundInfo($gameId); // current round
+
+        if ($latestRound['black_card']->getBlankCount() !== count($cardIds)) {
+            // invalid number of cards submitted
+            return false;
+        }
+
+        if ($roundId != $latestRound['round_id']) {
+            // submitted for an invalid round or round that already finished
+            return false;
+        }
+
+        if ($this->getGameMapper()->hasPlayerAnswered($roundId, $playerId)) {
+            // already submitted answers for this round
+            return false;
+        }
+
+        $cheater = !$this->getCardMapper()->playerHasCards($gameId, $playerId, $cardIds);
+        if ($cheater) {
+            // trying to submit cards that are not in players hand for that round
+            return false;
+        }
+
+        $this->getGameMapper()->insertPlayerAnswers($roundId, $playerId, $cardIds);
+        $this->getCardMapper()->markCardsAsUsed($gameId, $cardIds, $playerId);
+
+        return true;
     }
 
     public function startRound($gameId) // should it be protected? maybe...
