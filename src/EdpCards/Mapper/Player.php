@@ -56,6 +56,11 @@ class Player extends AbstractDbMapper
         return $player;
     }
 
+    public function updatePlayer($player)
+    {
+        $this->update($player, array('email' => $player->getEmail()));
+    }
+
     public function insertPlayerToGame($gameId, $playerId)
     {
         $this->insert(['game_id' => $gameId, 'player_id' => $playerId], 'game_player');

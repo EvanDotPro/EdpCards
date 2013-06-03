@@ -24,6 +24,7 @@ Real (Swagger) documentation coming soon.
 | GET    | /games                    | List all active games
 | POST   | /games                    | Create a new game (name, decks[], player\_id)
 | GET    | /games/{id}               | Get a specific game (and players)
+| GET    | /games/{id}/rounds/latest | Get the latest round in game
 | GET    | /games/{id}/players       | Get all players in a game
 | POST   | /games/{id}/players       | Add/join a player into a game (display\_name, email OR player\_id)
 | GET    | /games/{id}/players/{id}  | Get a player with their cards for a particular game

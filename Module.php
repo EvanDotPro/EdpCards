@@ -16,9 +16,9 @@ class Module
                     $mapper->setDbAdapter($sm->get('edpcards_db'));
                     $mapper->setEntityPrototype(new Entity\Game);
                     $hydrator = new ClassMethods;
-                    $hydrator->addFilter('getPlayers', new MethodMatchFilter('getPlayers'), FilterComposite::CONDITION_AND);
-                    $hydrator->addFilter('getPlayerCount', new MethodMatchFilter('getPlayerCount'), FilterComposite::CONDITION_AND);
-                    $hydrator->addFilter('getDecks', new MethodMatchFilter('getDecks'), FilterComposite::CONDITION_AND);
+                    foreach (array('getPlayers', 'getPlayerCount', 'getDecks', 'getCards') as $method) {
+                        $hydrator->addFilter($method, new MethodMatchFilter($method), FilterComposite::CONDITION_AND);
+                    }
                     $mapper->setHydrator($hydrator);
                     return $mapper;
                 },
@@ -26,6 +26,10 @@ class Module
                     $mapper = new Mapper\Player;
                     $mapper->setDbAdapter($sm->get('edpcards_db'));
                     $mapper->setEntityPrototype(new Entity\Player);
+                    $hydrator = new ClassMethods;
+                    $hydrator->addFilter('getEmailHash', new MethodMatchFilter('getEmailHash'), FilterComposite::CONDITION_AND);
+                    $hydrator->addFilter('getCards', new MethodMatchFilter('getCards'), FilterComposite::CONDITION_AND);
+                    $mapper->setHydrator($hydrator);
                     return $mapper;
                 },
                 'edpcards_cardmapper' => function($sm) {

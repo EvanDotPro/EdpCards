@@ -19,6 +19,7 @@ class Card extends AbstractDbMapper
     {
         $select = $this->getSelect()
                        ->columns(['id' => 'deck', 'count' => new Expression('COUNT(1)')])
+                       ->where(['enabled' => 1])
                        ->group('deck');
         $decks = $this->select($select, new \ArrayObject, new ArraySerializable)->toArray();
 
@@ -28,6 +29,13 @@ class Card extends AbstractDbMapper
         }
 
         return $decks;
+    }
+
+    public function findById($cardId)
+    {
+        $select = $this->getSelect()
+                       ->where(['id' => $cardId]);
+        return $this->select($select)->current();
     }
 
     public function findByDecks($decks)
@@ -55,6 +63,7 @@ class Card extends AbstractDbMapper
                 'game_id' => new Expression( (string) $gameId),
                 'card_id' => 'id',
             ])
+            ->where(['enabled' => 1])
             ->where(['deck' => $decks]);
         $select = $select->getSqlString($this->getDbAdapter()->getPlatform());
         $insert = 'INSERT INTO `game_card` (`game_id`, `card_id`) ' . $select . ';';
@@ -103,7 +112,7 @@ class Card extends AbstractDbMapper
         // TODO: Check if there are no more black cards, and re-shuffle
         $select = $this->getSelect('game_card')
             ->join('card', 'card.id = game_card.card_id')
-            ->where(['game_card.game_id' => $gameId, 'game_card.status' => 'available', 'card.type' => 'black'])
+            ->where(['game_card.game_id' => $gameId, 'game_card.status' => 'available', 'card.type' => 'black', 'card.enabled' => 1])
             ->limit(1)
             ->order(new Expression('RAND()'));
         $card = $this->select($select)->current();

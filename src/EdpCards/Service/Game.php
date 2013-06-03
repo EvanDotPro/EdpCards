@@ -36,6 +36,8 @@ class Game implements SM\ServiceLocatorAwareInterface, EM\EventManagerAwareInter
     {
         $email = strtolower($email);
         if ($player = $this->getPlayerMapper()->findPlayerByEmail($email)) {
+            $player->setDisplayName($displayName);
+            $this->getPlayerMapper()->updatePlayer($player);
             return $player;
         }
         return $this->getPlayerMapper()->insertPlayer($displayName, $email);
@@ -46,7 +48,29 @@ class Game implements SM\ServiceLocatorAwareInterface, EM\EventManagerAwareInter
      */
     public function getActiveGames()
     {
-        return $this->getGameMapper()->findActiveGames();
+        $games = $this->getGameMapper()->findActiveGames();
+
+        foreach ($games as $game) {
+            $players = $this->getPlayerMapper()->findPlayersByGame($game->getId());
+            $game->setPlayers($players);
+        }
+
+        return $games;
+    }
+
+    public function getRoundInfo($gameId, $roundId = null)
+    {
+        if (!$roundId) {
+            $currentRound = $this->getGameMapper()->getCurrentRound($gameId);
+        } else {
+            // todo: specific rounds
+        }
+
+        $data = array(
+            'black_card' => $this->getCardMapper()->findById($currentRound['card_id']),
+        );
+
+        return $data;
     }
 
     /**
@@ -55,8 +79,9 @@ class Game implements SM\ServiceLocatorAwareInterface, EM\EventManagerAwareInter
     public function getGame($gameId)
     {
         $game = $this->getGameMapper()->findById($gameId);
-
-	return $game;
+        $players = $this->getPlayerMapper()->findPlayersByGame($game->getId());
+        $game->setPlayers($players);
+        return $game;
     }
 
     /**

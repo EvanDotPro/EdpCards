@@ -19,9 +19,14 @@ class Player extends AbstractEntity
     protected $email;
 
     /**
+     * @var string;
+     */
+    protected $emailHash;
+
+    /**
      * @var int
      */
-    protected $points;
+    protected $points = 0;
 
     /**
      * @var Card[]
@@ -79,15 +84,26 @@ class Player extends AbstractEntity
     public function setEmail($email)
     {
         $this->email = $email;
+        $this->setEmailHash(md5($email));
         return $this;
     }
-    
+
     /**
      * @return string
      */
     public function getEmailHash()
     {
-        return md5($this->email);
+        return $this->emailHash;
+    }
+
+    /**
+     * @param string $emailHash
+     * @return Player
+     */
+    public function setEmailHash($emailHash)
+    {
+        $this->emailHash = $emailHash;
+        return $this;
     }
 
     /**

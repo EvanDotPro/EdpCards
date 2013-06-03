@@ -2,6 +2,8 @@
 namespace EdpCards\Controller;
 
 use Zend\Stdlib\Hydrator\ClassMethods as Hydrator;
+use Zend\Stdlib\Hydrator\Filter\MethodMatchFilter;
+use Zend\Stdlib\Hydrator\Filter\FilterComposite;
 use Zend\View\Model\JsonModel;
 
 trait HydratorAwareTrait
@@ -12,6 +14,7 @@ trait HydratorAwareTrait
     {
         if (!$this->hydrator) {
             $this->hydrator = new Hydrator;
+            $this->hydrator->addFilter('getEmail', new MethodMatchFilter('getEmail'), FilterComposite::CONDITION_AND);
         }
 
         return $this->hydrator;

@@ -8,21 +8,24 @@ use EdpCards\Service\GameServiceAwareTrait;
 class RoundsController extends AbstractRestfulController
 {
     use GameServiceAwareTrait;
+    use HydratorAwareTrait;
 
     protected $identifierName = 'round_id';
 
     public function getList()
     {
-        $games = $this->getGameService()->getActiveGames();
+        $games = $this->getGameService()->getCurrentRound($this->params('game_id'));
 
         return new JsonModel($games);
     }
 
     public function get($id)
     {
-        $game = $this->getGameService()->getGame($id);
+        if ($id == 'latest') {
+            $round = $this->getGameService()->getRoundInfo($this->params('game_id'));
+        }
 
-        return new JsonModel($game);
+        return $this->jsonModel($round);
     }
 
     public function create($data)
@@ -35,6 +38,7 @@ class RoundsController extends AbstractRestfulController
 
     public function update($id, $data)
     {
+
     }
 
     public function delete($id)
