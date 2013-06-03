@@ -62,7 +62,7 @@ class Card extends AbstractDbMapper
                 'game_id' => new Expression( (string) $gameId),
                 'card_id' => 'id',
             ))
-            ->where(array('enabled' => 1, 'decks' => $decks));
+            ->where(array('enabled' => 1, 'deck' => $decks));
         $select = $select->getSqlString($this->getDbAdapter()->getPlatform());
         $insert = 'INSERT INTO `game_card` (`game_id`, `card_id`) ' . $select . ';';
         $result = $this->getDbAdapter()->query($insert, Adapter::QUERY_MODE_EXECUTE);
