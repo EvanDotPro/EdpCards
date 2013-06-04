@@ -123,7 +123,8 @@ class Card extends AbstractDbMapper
     {
         $select = $this->getSelect('game_round_card')
                        ->join('card', 'game_round_card.card_id = card.id')
-                       ->where(array('game_round_card.round_id' => $roundId, 'game_round_card.player_id' => $playerId));
+                       ->where(array('game_round_card.round_id' => $roundId, 'game_round_card.player_id' => $playerId))
+                       ->order('game_round_card.sort ASC');
         return $this->select($select);
     }
 
@@ -147,7 +148,7 @@ class Card extends AbstractDbMapper
         // TODO: Check if there are no more black cards, and re-shuffle
         $select = $this->getSelect('game_card')
             ->join('card', 'card.id = game_card.card_id')
-            ->where(array('game_card.game_id' => $gameId, 'game_card.status' => 'available', 'card.type' => 'black', 'card.enabled' => 1))
+            ->where(array('game_card.game_id' => $gameId, 'game_card.status' => 'available', 'card.type' => 'black', 'card.enabled' => 1, 'card.id' => 291))
             ->limit(1)
             ->order(new Expression('RAND()'));
         $card = $this->select($select)->current();

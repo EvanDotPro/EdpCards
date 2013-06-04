@@ -82,11 +82,12 @@ class Game extends AbstractDbMapper implements SM\ServiceLocatorAwareInterface
 
     public function insertPlayerAnswers($roundId, $playerId, $cardIds)
     {
-        foreach ($cardIds as $cardId) {
+        foreach ($cardIds as $i => $cardId) {
             $data = array(
                 'round_id'  => $roundId,
                 'player_id' => $playerId,
                 'card_id'   => $cardId,
+                'order'     => $i,
             );
 
             $this->insert($data, 'game_round_card');
