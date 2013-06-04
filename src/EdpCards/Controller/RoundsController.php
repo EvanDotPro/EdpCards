@@ -36,7 +36,8 @@ class RoundsController extends AbstractRestfulController
     {
         // this is messy -- not really updating a "round" exactly...
         $result = $this->getGameService()->submitAnswers($roundId, $data['player_id'], $data['card_ids'], $this->params('game_id'));
-        return $this->jsonModel($result);
+        return new JsonModel;
+        //return $this->jsonModel($result);
     }
 
     public function delete($id)
