@@ -80,15 +80,17 @@ class Game extends AbstractDbMapper implements SM\ServiceLocatorAwareInterface
         $this->insert($data, 'game_round');
     }
 
-    public function insertPlayerAnswer($roundId, $playerId, $cardId)
+    public function insertPlayerAnswers($roundId, $playerId, $cardIds)
     {
-        $data = array(
-            'round_id'  => $roundId,
-            'player_id' => $playerId,
-            'card_id'   => $cardId,
-        );
+        foreach ($cardIds as $cardId) {
+            $data = array(
+                'round_id'  => $roundId,
+                'player_id' => $playerId,
+                'card_id'   => $cardId,
+            );
 
-        $this->insert($data, 'game_round_card');
+            $this->insert($data, 'game_round_card');
+        }
     }
 
     public function hasPlayerAnswered($roundId, $playerId)

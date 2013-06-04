@@ -135,8 +135,9 @@ class Game implements SM\ServiceLocatorAwareInterface
         if (count($players)) return $players->current(); // slightly messy to use current() here
         $player = $this->getPlayerMapper()->insertPlayerToGame($gameId, $playerId);
         if ($dealCards) {
-            // @TODO: Check the current black card in play and see if we need 10 or 12 cards
-            $this->getCardMapper()->dealCardsToPlayer($gameId, array($player->getId()), 10);
+            $latestRound = $this->getRoundInfo($gameId); // current round
+            $cardsToDeal = ($latestRound['black_card']->getBlankCount() === 3) ? 12 : 10;
+            $this->getCardMapper()->dealCardsToPlayer($gameId, array($player->getId()), $cardsToDeal);
         }
 
         return $player;
