@@ -18,6 +18,8 @@ class RoundsController extends AbstractRestfulController
     {
         if ($id == 'latest') {
             $round = $this->getGameService()->getRoundInfo($this->params('game_id'));
+        } else {
+            $round = $this->getGameService()->getRoundInfo($this->params('game_id'), $id);
         }
 
         return $this->jsonModel($round);

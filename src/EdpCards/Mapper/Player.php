@@ -46,6 +46,15 @@ class Player extends AbstractDbMapper
         return $this->select($select);
     }
 
+    public function findPlayersInRound($roundId)
+    {
+        $select = $this->getSelect('game_round_card')
+                       ->join('player', 'game_round_card.player_id = player.id')
+                       ->where(array('game_round_card.round_id' => $roundId))
+                       ->group('player.id');
+        return $this->select($select);
+    }
+
     public function insertPlayer($displayName, $email)
     {
         $player = clone $this->getEntityPrototype();

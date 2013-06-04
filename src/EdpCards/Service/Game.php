@@ -68,9 +68,21 @@ class Game implements SM\ServiceLocatorAwareInterface
             $round = $this->getGameMapper()->findRound($roundId);
         }
 
+        $players = $this->getPlayerMapper()->findPlayersInRound($roundId);
+
+        if (count($players) > 0) {
+            $playersArray = array();
+            foreach ($players as $player) {
+                $cards = $this->getCardMapper()->findCardsInRound($roundId, $player->id);
+                $player->setCards($cards);
+                $playersArray[] = $player;
+            }
+        }
+
         $data = array(
             'round_id'   => $round['id'],
             'game_id'    => $round['game_id'],
+            'players'    => isset($playersArray) ? $playersArray : array(),
             'black_card' => $this->getCardMapper()->findById($round['card_id']),
         );
 

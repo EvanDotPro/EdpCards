@@ -119,6 +119,14 @@ class Card extends AbstractDbMapper
         return (count($cardIds) === count($results));
     }
 
+    public function findCardsInRound($roundId, $playerId)
+    {
+        $select = $this->getSelect('game_round_card')
+                       ->join('card', 'game_round_card.card_id = card.id')
+                       ->where(array('game_round_card.round_id' => $roundId, 'game_round_card.player_id' => $playerId));
+        return $this->select($select);
+    }
+
     public function markCardsAsUsed($gameId, $cardIds, $playerId)
     {
             $where = array(
