@@ -63,6 +63,7 @@ class Game implements SM\ServiceLocatorAwareInterface
     {
         if (!$roundId && $gameId) {
             $round = $this->getGameMapper()->getCurrentRound($gameId);
+            $roundId = $round['id'];
         } elseif ($roundId) {
             // ignores gameId
             $round = $this->getGameMapper()->findRound($roundId);
